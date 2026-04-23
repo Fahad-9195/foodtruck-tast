@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.menusRouter = void 0;
+const express_1 = require("express");
+const authenticate_1 = require("../../../middlewares/authenticate");
+const authorize_roles_1 = require("../../../middlewares/authorize-roles");
+const roles_1 = require("../../../shared/constants/roles");
+const async_handler_1 = require("../../../shared/utils/async-handler");
+const menus_controller_1 = require("../controllers/menus.controller");
+const menusRouter = (0, express_1.Router)();
+exports.menusRouter = menusRouter;
+menusRouter.use(authenticate_1.authenticate);
+menusRouter.use((0, authorize_roles_1.authorizeRoles)(roles_1.ROLE_CODES.TRUCK_OWNER, roles_1.ROLE_CODES.ADMIN));
+menusRouter.get("/categories", (0, async_handler_1.asyncHandler)(menus_controller_1.menusController.listCategories));
+menusRouter.get("/", (0, async_handler_1.asyncHandler)(menus_controller_1.menusController.listByTruck));
+menusRouter.post("/", (0, async_handler_1.asyncHandler)(menus_controller_1.menusController.create));
+menusRouter.patch("/:menuItemId", (0, async_handler_1.asyncHandler)(menus_controller_1.menusController.update));
+menusRouter.delete("/:menuItemId", (0, async_handler_1.asyncHandler)(menus_controller_1.menusController.remove));

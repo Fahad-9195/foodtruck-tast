@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.adminRouter = void 0;
+const express_1 = require("express");
+const authenticate_1 = require("../middlewares/authenticate");
+const authorize_roles_1 = require("../middlewares/authorize-roles");
+const roles_1 = require("../shared/constants/roles");
+const async_handler_1 = require("../shared/utils/async-handler");
+const trucks_controller_1 = require("../modules/trucks/controllers/trucks.controller");
+const adminRouter = (0, express_1.Router)();
+exports.adminRouter = adminRouter;
+adminRouter.get("/admin/stats", authenticate_1.authenticate, (0, authorize_roles_1.authorizeRoles)(roles_1.ROLE_CODES.ADMIN), (0, async_handler_1.asyncHandler)(trucks_controller_1.trucksController.adminStats));

@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authRouter = void 0;
+const express_1 = require("express");
+const authenticate_1 = require("../../../middlewares/authenticate");
+const authorize_roles_1 = require("../../../middlewares/authorize-roles");
+const roles_1 = require("../../../shared/constants/roles");
+const async_handler_1 = require("../../../shared/utils/async-handler");
+const auth_controller_1 = require("../controllers/auth.controller");
+const authRouter = (0, express_1.Router)();
+exports.authRouter = authRouter;
+authRouter.post("/register", (0, async_handler_1.asyncHandler)(auth_controller_1.authController.register));
+authRouter.post("/login", (0, async_handler_1.asyncHandler)(auth_controller_1.authController.login));
+authRouter.get("/me", authenticate_1.authenticate, (0, async_handler_1.asyncHandler)(auth_controller_1.authController.getMe));
+authRouter.patch("/me", authenticate_1.authenticate, (0, async_handler_1.asyncHandler)(auth_controller_1.authController.updateMe));
+authRouter.patch("/me/password", authenticate_1.authenticate, (0, async_handler_1.asyncHandler)(auth_controller_1.authController.changeMyPassword));
+authRouter.post("/admin/register", authenticate_1.authenticate, (0, authorize_roles_1.authorizeRoles)(roles_1.ROLE_CODES.ADMIN), (0, async_handler_1.asyncHandler)(auth_controller_1.authController.createAdmin));
